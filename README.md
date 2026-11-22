@@ -2,7 +2,7 @@
 > **College Course**: Data Science Applications (DSA) Mini-Project  
 > **Student Authors**: **Ashwith Ashok Shetty** & **Shivam Swapnil Revankar**  
 > **Dataset**: [Gym Members Exercise Dataset (Vala Khorasani, Kaggle)](https://www.kaggle.com/datasets/valakhorasani/gym-members-exercise-dataset)  
-> **Mobile Target**: Android Debug APK via Capacitor
+> **Platform**: Full-Stack Web Application (Next.js + FastAPI)
 
 ---
 
@@ -13,7 +13,7 @@
 The application inverts typical monolithic data science workflows into a modular, production-ready full-stack architecture:
 - **Backend**: Built with **FastAPI** utilizing **Polars** as the primary high-speed in-memory DataFrame engine, **Pydantic v2** for strict schema validation, and **Scikit-Learn** for statistical machine learning pipelines.
 - **Frontend**: A responsive dashboard crafted in **Next.js (App Router, TypeScript, Tailwind CSS)** with **Recharts** interactive visualisations.
-- **Mobile Packaging**: Wrapped with **Capacitor** into an Android native project buildable as a standalone Android APK.
+- **Web & Cloud Delivery**: Engineered for zero-config unified deployment on **Vercel** or split deployment (Next.js on Vercel + FastAPI on Render).
 - **Offline Resiliency**: Features transparent fallback caching so the app runs smoothly in offline evaluation environments without crashing.
 
 ---
@@ -67,10 +67,6 @@ This project directly maps each stage of the DSA syllabus into dedicated backend
 │   ├── pyproject.toml                          # UV package management definition
 │   └── .env.example
 ├── frontend/
-│   ├── android/                                # Capacitor Native Android project
-│   │   ├── app/src/main/assets/public/         # Bundled Next.js static export
-│   │   ├── build.gradle
-│   │   └── gradlew.bat                         # Gradle build wrapper
 │   ├── src/
 │   │   ├── app/
 │   │   │   ├── page.tsx                        # 1. Home & syllabus map
@@ -84,10 +80,10 @@ This project directly maps each stage of the DSA syllabus into dedicated backend
 │   │   │   └── PipelineStepper.tsx             # Interactive 5-stage syllabus tracker
 │   │   └── lib/
 │   │       └── api.ts                          # Resilient API client with fallback data
-│   ├── capacitor.config.ts                     # Capacitor configuration
-│   ├── next.config.ts                          # Next.js static export configuration
+│   ├── next.config.ts                          # Next.js configuration
 │   ├── package.json
-│   └── vercel.json                             # Vercel deployment config
+│   └── tsconfig.json
+├── vercel.json                                 # Vercel multi-service orchestration
 └── README.md
 ```
 
@@ -154,88 +150,35 @@ This project directly maps each stage of the DSA syllabus into dedicated backend
 
 ---
 
-## 📱 5. Building the Android APK with Capacitor
+## 🌐 5. Deploying as a Website
 
-FitStreak is pre-configured with **Capacitor** to wrap the Next.js static export into a native Android application.
+FitStreak is designed to deploy seamlessly as a standalone web application.
 
-### Prerequisites
-
-| Requirement | Version | Install Command |
-|---|---|---|
-| **JDK 21** (Required by Capacitor 7 & Gradle 8.x; JDK 25 is too new for Gradle) | 21.x | `winget install --id EclipseAdoptium.Temurin.21.JDK -e` |
-| **Android SDK** | API 35+ / 36 | Install via [Android Studio](https://developer.android.com/studio) or Android command-line tools |
-
-> [!IMPORTANT]
-> After installing JDK 21, the project's `frontend/android/gradle.properties` already includes:
-> ```properties
-> org.gradle.java.home=C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.13.10002-hotspot
-> ```
-> Update this path if your JDK 21 is installed elsewhere.
->
-> The Android SDK path is set in `frontend/android/local.properties` (`sdk.dir=...`). Update it to match your SDK location if different.
-
-### Exact Build Steps:
-
-1. **Statically Export the Next.js Web Application**:
-   ```bash
-   cd frontend
-   npm run build
-   ```
-   This generates the production assets in `frontend/out/`.
-
-2. **Sync the Web Assets into the Android Native Project**:
-   ```bash
-   npm run cap:sync
-   ```
-   *(Or run `npx cap sync android`). This copies all HTML, JS, CSS, and SVG assets into `frontend/android/app/src/main/assets/public/`.*
-
-3. **Build the Debug APK via Gradle**:
-   - On Windows:
-     ```bash
-     cd android
-     .\gradlew.bat assembleDebug
-     ```
-   - On macOS/Linux:
-     ```bash
-     cd android
-     ./gradlew assembleDebug
-     ```
-   The built APK will be generated at:
-   ```text
-   frontend/android/app/build/outputs/apk/debug/app-debug.apk
-   ```
-
-4. **Alternatively, Open in Android Studio**:
-   ```bash
-   cd frontend
-   npx cap open android
-   ```
-   Click **Run 'app'** or **Build > Build Bundle(s) / APK(s) > Build APK(s)** to deploy to an emulator or USB-connected Android phone.
-
-> **💡 Android Network Note**:
-> When running the APK inside an Android Emulator, the local backend is reachable via `http://10.0.2.2:8000` (the Android emulator host loopback). Click the **Server Pill** in the top navigation bar to adjust the backend URL anytime. If offline, FitStreak's built-in fallback dataset ensures the charts and predictions still render seamlessly!
-
----
-
-## ☁️ 6. Cloud Deployment
-
-### Deploy Backend to Render or Railway
-- The backend contains a `render.yaml`, `Procfile`, and `Dockerfile`.
-- **Render**: Connect the GitHub repository and select `/backend` as the root directory. Render will detect `render.yaml` or run:
-  ```bash
-  uv sync && uv run python scripts/fetch_dataset.py && uv run python scripts/train_models.py
-  uv run uvicorn src.main:app --host 0.0.0.0 --port $PORT
-  ```
-
-### Deploy to Vercel (Unified Multi-Service Project)
-- The root of the repository includes `vercel.json` configured for **Vercel Services**:
-  - **`backend` service**: FastAPI Python ASGI service (`backend/main.py:app`)
-  - **`frontend` service**: Next.js App Router application with service binding (`BACKEND_URL`)
-- Public traffic routes automatically:
+### Option A: Unified Multi-Service Deployment on Vercel (Recommended)
+The repository includes a top-level `vercel.json` configured for **Vercel Services**:
+- **Frontend**: Next.js App Router service (`frontend/`)
+- **Backend**: FastAPI Python ASGI service (`backend/main.py:app`)
+- **Routing**:
   - `/api/(.*)` $\to$ `backend` service
   - `/docs` & `/openapi.json` $\to$ `backend` Swagger interactive documentation
   - `/(.*)` $\to$ `frontend` service
-- Connect this repository to Vercel with root directory set to `.`. Vercel automatically deploys both services under a single shared domain without CORS or extra URL configuration needed!
+- **Deploy**: Connect `https://github.com/24co35-ops/FitStreak` to Vercel with **Root Directory** set to `.`. Vercel automatically builds and deploys both services under one shared domain with automatic same-origin proxying.
+
+---
+
+### Option B: Split Service Deployment (Vercel + Render)
+
+#### 1. Deploy Backend on Render:
+- Create a new Web Service on [Render](https://render.com) pointing to the `/backend` folder.
+- **Build Command**: `uv sync && uv run python scripts/fetch_dataset.py && uv run python scripts/train_models.py`
+- **Start Command**: `uv run uvicorn src.main:app --host 0.0.0.0 --port $PORT`
+- Note your live backend URL (e.g., `https://fitstreak-backend.onrender.com`).
+
+#### 2. Deploy Frontend on Vercel:
+- Create a new project on [Vercel](https://vercel.com) pointing to the `/frontend` folder.
+- Set Environment Variable `NEXT_PUBLIC_API_URL` to your Render backend URL (e.g. `https://fitstreak-backend.onrender.com`).
+- **Build Command**: `npm run build`
+- **Output Directory**: Next.js default (`.next`)
 
 ---
 

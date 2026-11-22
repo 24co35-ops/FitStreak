@@ -34,15 +34,6 @@ wheels/
 .installed.cfg
 *.egg
 
-# Android build outputs & local config
-frontend/android/.gradle/
-frontend/android/build/
-frontend/android/app/build/
-frontend/android/capacitor-cordova-android-plugins/build/
-frontend/android/local.properties
-*.apk
-*.aab
-
 # Environment variables
 .env
 .env.local

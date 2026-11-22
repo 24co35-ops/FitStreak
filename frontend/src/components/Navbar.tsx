@@ -198,7 +198,7 @@ export function Navbar() {
               </button>
             </div>
             <p className="text-sm text-slate-300 mb-4">
-              Configure the FastAPI endpoint for FitStreak. When running on an Android device or emulator, use your machine IP or host bridge (<code className="bg-slate-800 px-1.5 py-0.5 rounded text-emerald-400">http://10.0.2.2:8000</code>).
+              Configure the FastAPI endpoint for FitStreak. When deployed on Vercel, leave blank for automatic same-origin routing (<code className="bg-slate-800 px-1.5 py-0.5 rounded text-emerald-400">""</code>).
             </p>
             <div className="space-y-4">
               <div>
@@ -209,7 +209,7 @@ export function Navbar() {
                   type="text"
                   value={urlInput}
                   onChange={(e) => setUrlInput(e.target.value)}
-                  placeholder="http://localhost:8000"
+                  placeholder="Leave empty for same-origin or enter URL"
                   className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500 text-sm"
                 />
               </div>
@@ -230,13 +230,6 @@ export function Navbar() {
                     className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px]"
                   >
                     Localhost:8000
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setUrlInput("http://10.0.2.2:8000")}
-                    className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px]"
-                  >
-                    Android Emulator (10.0.2.2:8000)
                   </button>
                 </div>
               </div>

@@ -190,7 +190,7 @@ export interface SampleMemberRecord {
   bmi: number;
 }
 
-// Configurable API base url with Vercel service binding, public routing, and localStorage override
+// Configurable API base url with Vercel service binding, same-origin routing, and env fallback
 export function getApiBaseUrl(): string {
   // 1. Server-side runtime (Next.js server functions / Route Handlers):
   // Reads the bound internal service URL injected by Vercel via service binding
@@ -202,21 +202,19 @@ export function getApiBaseUrl(): string {
   }
 
   // 2. Client-side browser runtime:
-  // Check user-configured override in localStorage (e.g. for Android emulator or remote backend)
+  // Check user-configured override in localStorage (if customized via Navbar)
   const saved = localStorage.getItem("fitstreak_backend_url");
-  if (saved !== null) return saved.trim().replace(/\/$/, "");
+  if (saved !== null && saved !== "") return saved.trim().replace(/\/$/, "");
 
   // If explicit public API URL is set at build time, use it
   if (process.env.NEXT_PUBLIC_API_URL) {
     return process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "");
   }
 
-  // When deployed on Vercel or a web server (not Capacitor native shell and not local dev port),
-  // return empty string so requests hit relative paths (/api/...) that Vercel rewrites to the backend service.
-  if (window.location && !window.location.protocol.startsWith("capacitor")) {
-    if (window.location.hostname !== "localhost") {
-      return "";
-    }
+  // When deployed on Vercel or a web server, return empty string
+  // so requests hit relative paths (/api/...) that Vercel rewrites to the backend service.
+  if (window.location && window.location.hostname !== "localhost") {
+    return "";
   }
 
   return "http://localhost:8000";
