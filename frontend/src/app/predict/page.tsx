@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { 
   Sparkles, 
   Flame, 
@@ -70,30 +70,24 @@ const PRESETS: Record<string, UserStatsPayload> = {
 };
 
 export default function PredictPage() {
-  const [formData, setFormData] = useState<UserStatsPayload>(PRESETS["High-Intensity Athlete"]);
-  const [caloriesResult, setCaloriesResult] = useState<CaloriesPredictionResult | null>(null);
-  const [levelResult, setLevelResult] = useState<LevelPredictionResult | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    // Check if stats are in localStorage
+  const [formData, setFormData] = useState<UserStatsPayload>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("fitstreak_user_stats");
       if (saved) {
         try {
-          const parsed = JSON.parse(saved);
-          setFormData(parsed);
-          runPredictions(parsed);
-          return;
+          return JSON.parse(saved);
         } catch (e) {
           console.error(e);
         }
       }
     }
-    runPredictions(formData);
-  }, []);
+    return PRESETS["High-Intensity Athlete"];
+  });
+  const [caloriesResult, setCaloriesResult] = useState<CaloriesPredictionResult | null>(null);
+  const [levelResult, setLevelResult] = useState<LevelPredictionResult | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const runPredictions = async (payload: UserStatsPayload) => {
+  const runPredictions = useCallback(async (payload: UserStatsPayload) => {
     setLoading(true);
     try {
       const [cal, lvl] = await Promise.all([
@@ -107,7 +101,11 @@ export default function PredictPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    runPredictions(formData);
+  }, [formData, runPredictions]);
 
   const handleInputChange = (field: keyof UserStatsPayload, val: any) => {
     const updated = {

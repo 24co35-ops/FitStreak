@@ -33,11 +33,10 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLive, setIsLive] = useState<boolean | null>(null);
   const [showConfig, setShowConfig] = useState(false);
-  const [urlInput, setUrlInput] = useState("");
+  const [urlInput, setUrlInput] = useState(() => (typeof window !== "undefined" ? getApiBaseUrl() : ""));
 
   useEffect(() => {
     const currentUrl = getApiBaseUrl();
-    setUrlInput(currentUrl);
 
     // Ping health endpoint
     const checkBackend = async () => {

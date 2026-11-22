@@ -30,36 +30,36 @@ export default function UploadPage() {
   const [loadingSamples, setLoadingSamples] = useState(true);
 
   // Form state
-  const [formData, setFormData] = useState<UserStatsPayload>({
-    age: 28,
-    gender: "Male",
-    weight_kg: 78.5,
-    height_m: 1.78,
-    max_bpm: 180,
-    avg_bpm: 150,
-    resting_bpm: 65,
-    session_duration_hours: 1.5,
-    workout_type: "HIIT",
-    fat_percentage: 17.5,
-    water_intake_liters: 3.0,
-    workout_frequency_days: 4,
-  });
-
-  const [activeSampleId, setActiveSampleId] = useState<number | null>(null);
-
-  useEffect(() => {
-    // Try loading saved data from localStorage
+  const [formData, setFormData] = useState<UserStatsPayload>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("fitstreak_user_stats");
       if (saved) {
         try {
-          setFormData(JSON.parse(saved));
+          return JSON.parse(saved);
         } catch (e) {
           console.error(e);
         }
       }
     }
+    return {
+      age: 28,
+      gender: "Male",
+      weight_kg: 78.5,
+      height_m: 1.78,
+      max_bpm: 180,
+      avg_bpm: 150,
+      resting_bpm: 65,
+      session_duration_hours: 1.5,
+      workout_type: "HIIT",
+      fat_percentage: 17.5,
+      water_intake_liters: 3.0,
+      workout_frequency_days: 4,
+    };
+  });
 
+  const [activeSampleId, setActiveSampleId] = useState<number | null>(null);
+
+  useEffect(() => {
     // Fetch sample records from backend
     fetchSampleRecords().then((res) => {
       setSamples(res);
