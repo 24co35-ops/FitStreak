@@ -1,7 +1,10 @@
-from typing import Dict, List
+from typing import Dict, List, Tuple
 import numpy as np
 import polars as pl
 from .data_loader import load_dataset
+
+
+Tuple_Dict = Tuple[List[Dict], List[Dict]]
 
 
 def get_calories_histogram(num_bins: int = 10) -> List[Dict]:
@@ -78,5 +81,4 @@ def get_boxplots_by_gender() -> Tuple_Dict:
         bmi_stats.append(_calculate_boxplot_stats(sub_df["BMI"], "BMI", g))
 
     return weight_stats, bmi_stats
-Tuple_Dict = tuple[List[Dict], List[Dict]]
 
