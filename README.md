@@ -13,7 +13,7 @@
 The application inverts typical monolithic data science workflows into a modular, production-ready full-stack architecture:
 - **Backend**: Built with **FastAPI** utilizing **Polars** as the primary high-speed in-memory DataFrame engine, **Pydantic v2** for strict schema validation, and **Scikit-Learn** for statistical machine learning pipelines.
 - **Frontend**: A responsive dashboard crafted in **Next.js (App Router, TypeScript, Tailwind CSS)** with **Recharts** interactive visualisations.
-- **Web & Cloud Delivery**: Engineered for zero-config unified deployment on **Vercel** or split deployment (Next.js on Vercel + FastAPI on Render).
+- **Web & Cloud Delivery**: Engineered for split deployment — **Next.js on Vercel** + **FastAPI on Render**.
 - **Offline Resiliency**: Features transparent fallback caching so the app runs smoothly in offline evaluation environments without crashing.
 
 ---
@@ -83,7 +83,6 @@ This project directly maps each stage of the DSA syllabus into dedicated backend
 │   ├── next.config.ts                          # Next.js configuration
 │   ├── package.json
 │   └── tsconfig.json
-├── vercel.json                                 # Vercel multi-service orchestration
 └── README.md
 ```
 
@@ -150,35 +149,22 @@ This project directly maps each stage of the DSA syllabus into dedicated backend
 
 ---
 
-## 🌐 5. Deploying as a Website
+## 🌐 5. Deployment (Vercel + Render)
 
-FitStreak is designed to deploy seamlessly as a standalone web application.
+FitStreak deploys as a split-service web application: **Next.js frontend on Vercel**, **FastAPI backend on Render**.
 
-### Option A: Unified Multi-Service Deployment on Vercel (Recommended)
-The repository includes a top-level `vercel.json` configured for **Vercel Services**:
-- **Frontend**: Next.js App Router service (`frontend/`)
-- **Backend**: FastAPI Python ASGI service (`backend/main.py:app`)
-- **Routing**:
-  - `/api/(.*)` $\to$ `backend` service
-  - `/docs` & `/openapi.json` $\to$ `backend` Swagger interactive documentation
-  - `/(.*)` $\to$ `frontend` service
-- **Deploy**: Connect `https://github.com/24co35-ops/FitStreak` to Vercel with **Root Directory** set to `.`. Vercel automatically builds and deploys both services under one shared domain with automatic same-origin proxying.
-
----
-
-### Option B: Split Service Deployment (Vercel + Render)
-
-#### 1. Deploy Backend on Render:
-- Create a new Web Service on [Render](https://render.com) pointing to the `/backend` folder.
+### 1. Deploy Backend on Render
+- Create a new **Web Service** on [Render](https://render.com) pointing to the `/backend` folder.
 - **Build Command**: `uv sync && uv run python scripts/fetch_dataset.py && uv run python scripts/train_models.py`
 - **Start Command**: `uv run uvicorn src.main:app --host 0.0.0.0 --port $PORT`
 - Note your live backend URL (e.g., `https://fitstreak-backend.onrender.com`).
 
-#### 2. Deploy Frontend on Vercel:
-- Create a new project on [Vercel](https://vercel.com) pointing to the `/frontend` folder.
+### 2. Deploy Frontend on Vercel
+- Create a new project on [Vercel](https://vercel.com) and connect this repository.
+- Set **Root Directory** to `frontend` in the project settings.
 - Set Environment Variable `NEXT_PUBLIC_API_URL` to your Render backend URL (e.g. `https://fitstreak-backend.onrender.com`).
 - **Build Command**: `npm run build`
-- **Output Directory**: Next.js default (`.next`)
+- **Output Directory**: Leave as framework default (`.next`) — do **not** set to `out`.
 
 ---
 
