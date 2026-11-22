@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "24co35-ops", email = "24co35@aitdgoa.edu.in" }
 ]
-requires-python = ">=3.14"
+requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.165.0",
     "httpx>=0.28.1",
