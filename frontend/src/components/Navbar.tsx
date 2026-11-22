@@ -219,6 +219,13 @@ export function Navbar() {
                 <div className="flex flex-wrap gap-2 pt-1">
                   <button
                     type="button"
+                    onClick={() => setUrlInput("")}
+                    className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px]"
+                  >
+                    Vercel / Same-Origin ("")
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => setUrlInput("http://localhost:8000")}
                     className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px]"
                   >

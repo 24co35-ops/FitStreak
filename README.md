@@ -227,12 +227,15 @@ FitStreak is pre-configured with **Capacitor** to wrap the Next.js static export
   uv run uvicorn src.main:app --host 0.0.0.0 --port $PORT
   ```
 
-### Deploy Frontend to Vercel
-- The frontend includes `vercel.json`.
-- In Vercel, set the root directory to `frontend`.
-- Build Command: `npm run build`
-- Output Directory: `out`
-- Add environment variable `NEXT_PUBLIC_API_URL` pointing to your deployed backend URL.
+### Deploy to Vercel (Unified Multi-Service Project)
+- The root of the repository includes `vercel.json` configured for **Vercel Services**:
+  - **`backend` service**: FastAPI Python ASGI service (`backend/main.py:app`)
+  - **`frontend` service**: Next.js App Router application with service binding (`BACKEND_URL`)
+- Public traffic routes automatically:
+  - `/api/(.*)` $\to$ `backend` service
+  - `/docs` & `/openapi.json` $\to$ `backend` Swagger interactive documentation
+  - `/(.*)` $\to$ `frontend` service
+- Connect this repository to Vercel with root directory set to `.`. Vercel automatically deploys both services under a single shared domain without CORS or extra URL configuration needed!
 
 ---
 
