@@ -15,17 +15,19 @@ import {
   CheckCircle2, 
   AlertCircle,
   Menu,
-  X
+  X,
+  Settings2,
+  ChevronRight
 } from "lucide-react";
 import { getApiBaseUrl, setApiBaseUrl } from "@/lib/api";
 
 const navItems = [
-  { name: "Home", href: "/", icon: Home },
-  { name: "Stats & Profile", href: "/upload", icon: UserPlus },
-  { name: "EDA Dashboard", href: "/eda", icon: BarChart3 },
-  { name: "Insights & PCA", href: "/insights", icon: SlidersHorizontal },
-  { name: "ML Predict", href: "/predict", icon: Sparkles },
-  { name: "Feedback", href: "/feedback", icon: MessageSquareHeart },
+  { name: "Home", href: "/", icon: Home, stage: "Overview" },
+  { name: "Stats & Profile", href: "/upload", icon: UserPlus, stage: "Stage 1" },
+  { name: "EDA Dashboard", href: "/eda", icon: BarChart3, stage: "Stage 2" },
+  { name: "Insights & PCA", href: "/insights", icon: SlidersHorizontal, stage: "Stage 3" },
+  { name: "ML Predict", href: "/predict", icon: Sparkles, stage: "Stage 4" },
+  { name: "Feedback", href: "/feedback", icon: MessageSquareHeart, stage: "Stage 5" },
 ];
 
 export function Navbar() {
@@ -62,102 +64,133 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-950/85 backdrop-blur-md border-b border-slate-800 text-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
-              <Flame className="w-6 h-6 text-slate-950 fill-slate-950" />
+    <header className="sticky top-3 z-50 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+      <div className="rounded-2xl bg-slate-950/80 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50 px-3.5 sm:px-5 py-2.5 flex items-center justify-between transition-all">
+        {/* Brand / Logo */}
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-400 p-[1px] shadow-lg shadow-emerald-500/25 group-hover:shadow-emerald-500/40 transition-all duration-300">
+            <div className="w-full h-full bg-slate-950 rounded-[11px] flex items-center justify-center">
+              <Flame className="w-5 h-5 text-emerald-400 fill-emerald-400 group-hover:scale-110 transition-transform" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-white via-slate-200 to-emerald-400 bg-clip-text text-transparent">
-                  FitStreak
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                  DSA Project
-                </span>
-              </div>
-              <p className="text-xs text-slate-400 hidden sm:block">Fitness Analytics & ML Pipeline</p>
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold text-lg sm:text-xl tracking-tight text-white group-hover:text-emerald-300 transition">
+                FitStreak
+              </span>
+              <span className="text-[9px] font-mono uppercase tracking-widest bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/25">
+                DSA
+              </span>
             </div>
-          </Link>
+            <p className="text-[11px] text-slate-400 font-medium hidden sm:block tracking-tight">Fitness Analytics & ML Pipeline</p>
+          </div>
+        </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${
-                    isActive
-                      ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-sm"
-                      : "text-slate-300 hover:text-white hover:bg-slate-900"
-                  }`}
-                >
-                  <Icon className={`w-4 h-4 ${isActive ? "text-emerald-400" : "text-slate-400"}`} />
-                  {item.name}
-                </Link>
-              );
-            })}
-          </nav>
+        {/* Desktop Navigation */}
+        <nav className="hidden lg:flex items-center gap-1 bg-slate-900/60 p-1 rounded-xl border border-white/5">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`relative flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold tracking-tight transition-all duration-200 ${
+                  isActive
+                    ? "bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-sm shadow-emerald-500/10"
+                    : "text-slate-300 hover:text-white hover:bg-slate-800/60"
+                }`}
+              >
+                {isActive && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400 animate-pulse" />
+                )}
+                <Icon className={`w-3.5 h-3.5 ${isActive ? "text-emerald-400" : "text-slate-400"}`} />
+                <span>{item.name}</span>
+              </Link>
+            );
+          })}
+        </nav>
 
-          {/* Server status pill & config button */}
-          <div className="hidden sm:flex items-center gap-3">
-            <button
-              onClick={() => setShowConfig(true)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-900 border border-slate-800 hover:border-slate-700 transition"
-              title="Click to configure backend API URL"
-            >
-              {isLive === true ? (
-                <>
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                  </span>
-                  <span className="text-emerald-400">Backend Live</span>
-                </>
-              ) : isLive === false ? (
-                <>
-                  <span className="h-2 w-2 rounded-full bg-amber-400"></span>
-                  <span className="text-amber-300">Offline Fallback</span>
-                </>
-              ) : (
-                <>
-                  <span className="h-2 w-2 rounded-full bg-slate-500 animate-pulse"></span>
-                  <span className="text-slate-400">Connecting...</span>
-                </>
+        {/* Right Section: Status Indicator & Settings */}
+        <div className="flex items-center gap-2">
+          {/* Live Backend Badge */}
+          <button
+            onClick={() => setShowConfig(!showConfig)}
+            title="Click to configure API Endpoint"
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono border transition-all ${
+              isLive === true
+                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/25 hover:bg-emerald-500/20"
+                : isLive === false
+                ? "bg-amber-500/10 text-amber-400 border-amber-500/25 hover:bg-amber-500/20"
+                : "bg-slate-800/60 text-slate-400 border-slate-700/60"
+            }`}
+          >
+            <span className="relative flex h-2 w-2">
+              {isLive === true && (
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               )}
-              <Server className="w-3.5 h-3.5 text-slate-400" />
-            </button>
-          </div>
+              <span className={`relative inline-flex rounded-full h-2 w-2 ${
+                isLive === true ? "bg-emerald-400" : isLive === false ? "bg-amber-400" : "bg-slate-400"
+              }`} />
+            </span>
+            <span className="font-semibold hidden sm:inline">
+              {isLive === true ? "Backend Live" : isLive === false ? "Offline Fallback" : "Checking..."}
+            </span>
+            <Settings2 className="w-3.5 h-3.5 ml-0.5 text-slate-400" />
+          </button>
 
-          {/* Mobile hamburger */}
-          <div className="flex lg:hidden items-center gap-2">
-            <button
-              onClick={() => setShowConfig(true)}
-              className="p-2 rounded-lg text-slate-400 hover:bg-slate-900"
-              aria-label="Server settings"
-            >
-              <Server className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 focus:outline-none"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
+          {/* Mobile Menu Toggle Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
       </div>
 
+      {/* Backend Settings Dialog */}
+      {showConfig && (
+        <div className="mt-2 p-4 rounded-2xl bg-slate-950/95 border border-slate-800 backdrop-blur-xl shadow-2xl max-w-lg mx-auto transition-all">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div className="flex items-center gap-2">
+              <Server className="w-4 h-4 text-emerald-400" />
+              <h4 className="text-sm font-bold text-white">API Service Endpoint</h4>
+            </div>
+            <button
+              onClick={() => setShowConfig(false)}
+              className="text-slate-400 hover:text-slate-200 p-1"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="pt-3 space-y-3">
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Default is <code className="bg-slate-900 px-1.5 py-0.5 rounded text-emerald-400 font-mono">http://localhost:8000</code>. When offline, transparent fallback caching ensures every page still functions.
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={urlInput}
+                onChange={(e) => setUrlInput(e.target.value)}
+                placeholder="http://localhost:8000"
+                className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
+              />
+              <button
+                onClick={handleSaveUrl}
+                className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-b border-slate-800 bg-slate-950 px-4 pt-2 pb-4 space-y-1">
+        <div className="lg:hidden mt-2 p-3 rounded-2xl bg-slate-950/95 border border-white/10 backdrop-blur-xl shadow-2xl space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -166,94 +199,24 @@ export function Navbar() {
                 key={item.name}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium transition ${
+                className={`flex items-center justify-between p-3 rounded-xl text-sm font-semibold transition ${
                   isActive
-                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                    : "text-slate-300 hover:text-white hover:bg-slate-900"
+                    ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                    : "text-slate-300 hover:bg-slate-900 hover:text-white"
                 }`}
               >
-                <Icon className={`w-5 h-5 ${isActive ? "text-emerald-400" : "text-slate-400"}`} />
-                {item.name}
+                <div className="flex items-center gap-3">
+                  <Icon className={`w-4 h-4 ${isActive ? "text-emerald-400" : "text-slate-400"}`} />
+                  <span>{item.name}</span>
+                </div>
+                <span className="text-[10px] font-mono uppercase text-slate-400 bg-slate-900 px-2 py-0.5 rounded">
+                  {item.stage}
+                </span>
               </Link>
             );
           })}
         </div>
       )}
-
-      {/* Backend URL Config Modal */}
-      {showConfig && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <Server className="w-5 h-5 text-emerald-400" />
-                Backend Configuration
-              </h3>
-              <button
-                onClick={() => setShowConfig(false)}
-                className="text-slate-400 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <p className="text-sm text-slate-300 mb-4">
-              Configure the FastAPI endpoint for FitStreak. When deployed on Vercel, leave blank for automatic same-origin routing (<code className="bg-slate-800 px-1.5 py-0.5 rounded text-emerald-400">""</code>).
-            </p>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
-                  API Endpoint URL
-                </label>
-                <input
-                  type="text"
-                  value={urlInput}
-                  onChange={(e) => setUrlInput(e.target.value)}
-                  placeholder="Leave empty for same-origin or enter URL"
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500 text-sm"
-                />
-              </div>
-
-              <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800/80 text-xs text-slate-400 space-y-1">
-                <div className="font-semibold text-slate-300">Quick Presets:</div>
-                <div className="flex flex-wrap gap-2 pt-1">
-                  <button
-                    type="button"
-                    onClick={() => setUrlInput("")}
-                    className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px]"
-                  >
-                    Vercel / Same-Origin ("")
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setUrlInput("http://localhost:8000")}
-                    className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px]"
-                  >
-                    Localhost:8000
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex gap-3 justify-end pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowConfig(false)}
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSaveUrl}
-                  className="px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition"
-                >
-                  Save & Reconnect
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 }
-
