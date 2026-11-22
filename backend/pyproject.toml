@@ -1,0 +1,33 @@
+[project]
+name = "fitstreak-backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "24co35-ops", email = "24co35@aitdgoa.edu.in" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi>=0.165.0",
+    "httpx>=0.28.1",
+    "joblib>=1.6.0",
+    "kaggle>=2.2.5",
+    "pandas>=3.1.1",
+    "polars>=2.1.0",
+    "pyarrow>=26.0.1",
+    "pydantic>=2.14.4",
+    "python-dotenv>=1.2.4",
+    "requests>=2.34.2",
+    "scikit-learn>=1.9.1",
+    "scipy>=1.18.1",
+    "statsmodels>=0.15.0",
+    "uvicorn[standard]>=0.54.0",
+    "vadersentiment>=3.3.2",
+]
+
+[project.scripts]
+fitstreak-backend = "fitstreak_backend:main"
+
+[build-system]
+requires = ["uv_build>=0.12.14,<0.13.0"]
+build-backend = "uv_build"

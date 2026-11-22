@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: fitstreak-backend
+    env: python
+    plan: free
+    buildCommand: "uv sync && uv run python scripts/fetch_dataset.py && uv run python scripts/train_models.py"
+    startCommand: "uv run uvicorn src.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: ENVIRONMENT
+        value: production
+
