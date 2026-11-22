@@ -13,7 +13,7 @@
 The application inverts typical monolithic data science workflows into a modular, production-ready full-stack architecture:
 - **Backend**: Built with **FastAPI** utilizing **Polars** as the primary high-speed in-memory DataFrame engine, **Pydantic v2** for strict schema validation, and **Scikit-Learn** for statistical machine learning pipelines.
 - **Frontend**: A responsive dashboard crafted in **Next.js (App Router, TypeScript, Tailwind CSS)** with **Recharts** interactive visualisations.
-- **Web & Cloud Delivery**: Engineered for split deployment — **Next.js on Vercel** + **FastAPI on Render**.
+- **Local-First Design**: Runs entirely on `localhost` — no cloud deployment required for testing or demo.
 - **Offline Resiliency**: Features transparent fallback caching so the app runs smoothly in offline evaluation environments without crashing.
 
 ---
@@ -61,9 +61,7 @@ This project directly maps each stage of the DSA syllabus into dedicated backend
 │   │   ├── insights.py                         # Correlation, VIF & PCA analytics
 │   │   ├── models_service.py                   # Joblib model inference engine
 │   │   └── sentiment.py                        # VADER text analytics & tokenization
-│   ├── Dockerfile                              # UV-based container image
-│   ├── render.yaml                             # Render deployment blueprint
-│   ├── Procfile                                # Railway / Heroku start command
+│   ├── Dockerfile                              # Container image (optional local use)
 │   ├── pyproject.toml                          # UV package management definition
 │   └── .env.example
 ├── frontend/
@@ -88,7 +86,9 @@ This project directly maps each stage of the DSA syllabus into dedicated backend
 
 ---
 
-## ⚡ 4. How to Run Locally
+## ⚡ 4. Running Locally (Demo / Viva)
+
+> Both servers must be running simultaneously. Use **two separate terminals**.
 
 ### Prerequisites
 - Python 3.10+ and [uv](https://github.com/astral-sh/uv) (fast Python package manager)
@@ -96,75 +96,30 @@ This project directly maps each stage of the DSA syllabus into dedicated backend
 
 ---
 
-### Step 1: Start the Backend (FastAPI + Polars + UV)
+### Terminal 1 — Backend (FastAPI + Polars)
 
-1. Open your terminal and navigate to `/backend`:
-   ```bash
-   cd backend
-   ```
+```bash
+cd backend
 
-2. Download and cache the Kaggle dataset:
-   ```bash
-   # Optional: set KAGGLE_USERNAME and KAGGLE_KEY in your environment or .env
-   uv run python scripts/fetch_dataset.py
-   ```
-   *(If Kaggle credentials are not provided, the script automatically falls back to fetching the verified authentic dataset mirror).*
+# First-time setup only (skip if already done):
+uv run python scripts/fetch_dataset.py      # Download Kaggle dataset
+uv run python scripts/train_models.py        # Train & export ML models
+uv run python scripts/test_api.py            # Run 9-point test suite (optional)
 
-3. Train and export the machine learning models:
-   ```bash
-   uv run python scripts/train_models.py
-   ```
+# Start the server:
+uv run uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
+```
+- **Swagger Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Health Check**: [http://localhost:8000/api/health](http://localhost:8000/api/health)
 
-4. Run the automated API verification test suite:
-   ```bash
-   uv run python scripts/test_api.py
-   ```
+### Terminal 2 — Frontend (Next.js)
 
-5. Launch the FastAPI development server:
-   ```bash
-   uv run uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
-   ```
-   - **Interactive Swagger Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
-   - **Health Endpoint**: [http://localhost:8000/api/health](http://localhost:8000/api/health)
-
----
-
-### Step 2: Start the Frontend (Next.js)
-
-1. Open a second terminal and navigate to `/frontend`:
-   ```bash
-   cd frontend
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Launch the development server:
-   ```bash
-   npm run dev
-   ```
-   Open your browser at **[http://localhost:3000](http://localhost:3000)**.
-
----
-
-## 🌐 5. Deployment (Vercel + Render)
-
-FitStreak deploys as a split-service web application: **Next.js frontend on Vercel**, **FastAPI backend on Render**.
-
-### 1. Deploy Backend on Render
-- Create a new **Web Service** on [Render](https://render.com) pointing to the `/backend` folder.
-- **Build Command**: `uv sync && uv run python scripts/fetch_dataset.py && uv run python scripts/train_models.py`
-- **Start Command**: `uv run uvicorn src.main:app --host 0.0.0.0 --port $PORT`
-- Note your live backend URL (e.g., `https://fitstreak-backend.onrender.com`).
-
-### 2. Deploy Frontend on Vercel
-- Create a new project on [Vercel](https://vercel.com) and connect this repository.
-- Set **Root Directory** to `frontend` in the project settings.
-- Set Environment Variable `NEXT_PUBLIC_API_URL` to your Render backend URL (e.g. `https://fitstreak-backend.onrender.com`).
-- **Build Command**: `npm run build`
-- **Output Directory**: Leave as framework default (`.next`) — do **not** set to `out`.
+```bash
+cd frontend
+npm install          # First-time only
+npm run dev
+```
+- **Open**: [http://localhost:3000](http://localhost:3000)
 
 ---
 
