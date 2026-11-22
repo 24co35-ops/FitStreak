@@ -1,5 +1,5 @@
 # FitStreak — Fitness Analytics & Predictive ML Engine
-> **College Course**: Data Science Applications (DSA) Mini-Project  
+> **College Course**: Data Science and Analytics (DSA) Mini-Project  
 > **Student Authors**: **Ashwith Ashok Shetty** & **Shivam Swapnil Revankar**  
 > **Dataset**: [Gym Members Exercise Dataset (Vala Khorasani, Kaggle)](https://www.kaggle.com/datasets/valakhorasani/gym-members-exercise-dataset)  
 > **Platform**: Full-Stack Web Application (Next.js + FastAPI)
@@ -8,7 +8,7 @@
 
 ## 📌 1. Project Overview
 
-**FitStreak** is a full-stack fitness analytics and machine learning application developed to demonstrate a complete, industry-standard data science lifecycle for a college **Data Science Applications (DSA)** curriculum. 
+**FitStreak** is a full-stack fitness analytics and machine learning application developed to demonstrate a complete, industry-standard data science lifecycle for a college **Data Science and Analytics (DSA)** curriculum. 
 
 The application inverts typical monolithic data science workflows into a modular, production-ready full-stack architecture:
 - **Backend**: Built with **FastAPI** utilizing **Polars** as the primary high-speed in-memory DataFrame engine, **Pydantic v2** for strict schema validation, and **Scikit-Learn** for statistical machine learning pipelines.
