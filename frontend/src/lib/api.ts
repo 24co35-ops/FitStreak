@@ -197,13 +197,9 @@ export function getApiBaseUrl(): string {
     return process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "");
   }
 
-  // When deployed on Vercel or a web server, return empty string
-  // so requests hit relative paths (/api/...) that Vercel rewrites to the backend service.
-  if (window.location && window.location.hostname !== "localhost") {
-    return "";
-  }
-
-  return "http://localhost:8000";
+  // When running via Vercel Services, `vercel dev`, or `next dev` (via next.config.ts rewrite),
+  // return empty string so browser requests use same-origin relative paths (/api/...).
+  return "";
 }
 
 export function setApiBaseUrl(url: string) {
