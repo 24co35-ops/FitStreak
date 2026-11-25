@@ -183,29 +183,6 @@ class LevelPredictionResponse(BaseModel):
 
 
 # -------------------------------------------------------------
-# Sentiment Schemas
-# -------------------------------------------------------------
-class SentimentInput(BaseModel):
-    note: str = Field(..., min_length=2, max_length=2000, description="Workout feedback text")
-
-
-class WordFreq(BaseModel):
-    text: str
-    value: int
-
-
-class SentimentResponse(BaseModel):
-    sentiment_label: str
-    compound_score: float
-    positive_score: float
-    neutral_score: float
-    negative_score: float
-    summary: str
-    word_frequencies: List[WordFreq]
-    total_words: int
-
-
-# -------------------------------------------------------------
 # Sample Dataset Record
 # -------------------------------------------------------------
 class SampleMember(BaseModel):

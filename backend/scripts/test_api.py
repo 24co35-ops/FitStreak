@@ -72,14 +72,8 @@ def main():
         probs_str = ", ".join([f"{p['level_name']}: {p['percentage']}%" for p in data['probabilities']])
         print(f"   [✓] Level Predicted: {data['predicted_level_name']} ({probs_str})")
 
-        print("9. Testing POST /api/feedback/sentiment")
-        res = client.post("/api/feedback/sentiment", json={"note": "Amazing high energy workout! Felt super strong and accomplished."})
-        assert res.status_code == 200, res.text
-        data = res.json()
-        print(f"   [✓] Sentiment: {data['sentiment_label']} (Score: {data['compound_score']}) | Word frequencies: {len(data['word_frequencies'])}")
-
         print("\n=======================================================")
-        print("  ALL 9 BACKEND ENDPOINTS VALIDATED & TESTED (100% PASS)  ")
+        print("  ALL 8 BACKEND ENDPOINTS VALIDATED & TESTED (100% PASS)  ")
         print("=======================================================")
 
 if __name__ == "__main__":

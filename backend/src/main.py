@@ -28,12 +28,9 @@ from .schemas import (
     LevelPredictionResponse,
     PCAResponse,
     SampleMember,
-    SentimentInput,
-    SentimentResponse,
     SummaryResponse,
     UserStatsInput,
 )
-from .sentiment import analyze_workout_feedback
 
 
 @asynccontextmanager
@@ -84,7 +81,6 @@ def root():
             "2. Visual EDA (/api/eda/charts)",
             "3. Correlation & Dimensionality Reduction (/api/insights/correlation, /api/insights/pca)",
             "4. Supervised ML Predictions (/api/predict/calories, /api/predict/level)",
-            "5. Text Analytics & Sentiment (/api/feedback/sentiment)",
         ],
         "docs_url": "/docs",
     }
@@ -181,12 +177,4 @@ def predict_level_endpoint(user_input: UserStatsInput):
         return predict_level(user_input)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Experience level prediction error: {str(e)}")
-
-
-@app.post("/api/feedback/sentiment", response_model=SentimentResponse, tags=["Text Analytics"])
-def analyze_feedback(input_data: SentimentInput):
-    try:
-        return analyze_workout_feedback(input_data.note)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Sentiment analysis error: {str(e)}")
 

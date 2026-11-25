@@ -8,7 +8,6 @@ import {
   BarChart3, 
   SlidersHorizontal, 
   Sparkles, 
-  MessageSquareHeart, 
   UserPlus, 
   Home, 
   Server, 
@@ -27,7 +26,6 @@ const navItems = [
   { name: "EDA Dashboard", href: "/eda", icon: BarChart3, stage: "Stage 2" },
   { name: "Insights & PCA", href: "/insights", icon: SlidersHorizontal, stage: "Stage 3" },
   { name: "ML Predict", href: "/predict", icon: Sparkles, stage: "Stage 4" },
-  { name: "Feedback", href: "/feedback", icon: MessageSquareHeart, stage: "Stage 5" },
 ];
 
 export function Navbar() {

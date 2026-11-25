@@ -22,7 +22,6 @@ dependencies = [
     "scipy>=1.18.1",
     "statsmodels>=0.15.0",
     "uvicorn[standard]>=0.54.0",
-    "vadersentiment>=3.3.2",
 ]
 
 [project.scripts]

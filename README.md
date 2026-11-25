@@ -28,7 +28,6 @@ This project directly maps each stage of the DSA syllabus into dedicated backend
 | **Stage 2** | **Exploratory Data Analysis (EDA)**<br>• Univariate & Bivariate distributions<br>• Frequency countplots<br>• 5-number summary (Min, $Q_1$, Med, $Q_3$, Max) grouped by demographic strata | `GET /api/eda/charts`<br>`backend/src/eda.py` | **EDA Dashboard** (`/eda`)<br>• Calories Burned Histogram (10 bins)<br>• Workout Type Countplot (Cardio, HIIT, Strength, Yoga)<br>• Gender-stratified Weight & BMI Boxplot metrics<br>• Descriptive statistics table |
 | **Stage 3** | **Correlation & Dimensionality Reduction**<br>• Pearson correlation matrix ($12 \times 12$)<br>• Multicollinearity diagnostics & alerts<br>• Variance Inflation Factor (VIF)<br>• Principal Component Analysis (stand-in for factor analysis) | `GET /api/insights/correlation`<br>`GET /api/insights/pca`<br>`backend/src/insights.py` | **Insights & PCA** (`/insights`)<br>• Interactive Correlation Heatmap<br>• VIF collinearity severity cards<br>• PCA Scree Plot (Eigenvalues & Cumulative Variance)<br>• Component Loadings matrix ($PC_1$ to $PC_5$) |
 | **Stage 4** | **Supervised Machine Learning Models**<br>• One-Hot Encoding for categorical features<br>• Simple Linear Regression (Duration $\to$ Calories)<br>• Multiple Linear Regression ($R^2 = 0.9803$)<br>• Multinomial Logistic Regression (Experience Level Classifier: 87.7% accuracy) | `POST /api/predict/calories`<br>`POST /api/predict/level`<br>`backend/src/models_service.py`<br>`backend/scripts/train_models.py` | **ML Predict** (`/predict`)<br>• Calorie prediction with exact mathematical equation<br>• Linear feature contribution breakdown<br>• Level classifier with probability progress bars<br>• Prescriptive training recommendations |
-| **Stage 5** | **Qualitative Text Analytics & Sentiment**<br>• Lexical sentiment scoring (VADER compound, positive, neutral, negative)<br>• Stopwords filtering & token frequency extraction | `POST /api/feedback/sentiment`<br>`backend/src/sentiment.py` | **Feedback** (`/feedback`)<br>• Workout note reflection input<br>• Compound score badge (-1.0 to +1.0)<br>• Key descriptor tag cloud |
 
 ---
 
@@ -51,7 +50,7 @@ This project directly maps each stage of the DSA syllabus into dedicated backend
 │   ├── scripts/
 │   │   ├── fetch_dataset.py                    # Kaggle API fetcher with env credentials
 │   │   ├── train_models.py                     # Offline ML model training script
-│   │   └── test_api.py                         # 9-point automated test suite
+│   │   └── test_api.py                         # 8-point automated test suite
 │   ├── src/
 │   │   ├── main.py                             # FastAPI application entrypoint
 │   │   ├── config.py                           # App settings & CORS configuration
@@ -59,8 +58,7 @@ This project directly maps each stage of the DSA syllabus into dedicated backend
 │   │   ├── data_loader.py                      # Polars data extraction & IQR cleaning
 │   │   ├── eda.py                              # Visual aggregation endpoints
 │   │   ├── insights.py                         # Correlation, VIF & PCA analytics
-│   │   ├── models_service.py                   # Joblib model inference engine
-│   │   └── sentiment.py                        # VADER text analytics & tokenization
+│   │   └── models_service.py                   # Joblib model inference engine
 │   ├── Dockerfile                              # Container image (optional local use)
 │   ├── pyproject.toml                          # UV package management definition
 │   └── .env.example
@@ -71,11 +69,10 @@ This project directly maps each stage of the DSA syllabus into dedicated backend
 │   │   │   ├── upload/page.tsx                 # 2. Member stats & profile
 │   │   │   ├── eda/page.tsx                    # 3. EDA Visual dashboard
 │   │   │   ├── insights/page.tsx               # 4. Correlation & PCA
-│   │   │   ├── predict/page.tsx                # 5. Live ML predictions
-│   │   │   └── feedback/page.tsx               # 6. Text analytics & sentiment
+│   │   │   └── predict/page.tsx                # 5. Live ML predictions
 │   │   ├── components/
 │   │   │   ├── Navbar.tsx                      # Header with backend reconnect modal
-│   │   │   └── PipelineStepper.tsx             # Interactive 5-stage syllabus tracker
+│   │   │   └── PipelineStepper.tsx             # Interactive 4-stage syllabus tracker
 │   │   └── lib/
 │   │       └── api.ts                          # Resilient API client with fallback data
 │   ├── next.config.ts                          # Next.js configuration
@@ -104,7 +101,7 @@ cd backend
 # First-time setup only (skip if already done):
 uv run python scripts/fetch_dataset.py      # Download Kaggle dataset
 uv run python scripts/train_models.py        # Train & export ML models
-uv run python scripts/test_api.py            # Run 9-point test suite (optional)
+uv run python scripts/test_api.py            # Run 8-point test suite (optional)
 
 # Start the server:
 uv run uvicorn src.main:app --reload --host 0.0.0.0 --port 8000

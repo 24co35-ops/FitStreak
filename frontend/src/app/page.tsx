@@ -14,7 +14,6 @@ import {
   Database,
   Users,
   BrainCircuit,
-  MessageSquareHeart,
   Zap,
   TrendingUp,
   ShieldCheck,
@@ -62,16 +61,6 @@ export default function HomePage() {
       badge: "Scikit-Learn (Joblib)",
       color: "from-amber-500/20 to-orange-500/10 border-amber-500/30 text-amber-400",
       accent: "border-amber-500/40",
-    },
-    {
-      step: 5,
-      title: "Text Analytics & Sentiment",
-      syllabus: "Stage 5: NLP Workout Reflections",
-      desc: "VADER sentiment evaluation on post-workout notes with keyword token frequency extraction and qualitative recovery summaries.",
-      href: "/feedback",
-      badge: "VADER NLP",
-      color: "from-pink-500/20 to-rose-500/10 border-pink-500/30 text-pink-400",
-      accent: "border-pink-500/40",
     },
   ];
 
@@ -258,11 +247,11 @@ export default function HomePage() {
             </p>
           </div>
           <span className="text-xs font-mono bg-slate-900 border border-slate-800 text-slate-300 px-3 py-1.5 rounded-lg w-fit">
-            5 Interactive Stages
+            4 Interactive Stages
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {pipelineStages.map((stage) => (
             <Link
               key={stage.step}

@@ -17,7 +17,6 @@ const steps: Step[] = [
   { num: 2, title: "EDA Visuals", syllabus: "Bivariate & Boxplots", href: "/eda", tag: "Distribution" },
   { num: 3, title: "Insights & PCA", syllabus: "Correlation & VIF", href: "/insights", tag: "Reduction" },
   { num: 4, title: "ML Models", syllabus: "Linear & Logistic Reg", href: "/predict", tag: "Inference" },
-  { num: 5, title: "Feedback NLP", syllabus: "VADER Text Analytics", href: "/feedback", tag: "Qualitative" },
 ];
 
 export function PipelineStepper({ currentStep }: { currentStep: number }) {
@@ -54,8 +53,8 @@ export function PipelineStepper({ currentStep }: { currentStep: number }) {
         </div>
       </div>
 
-      {/* Grid of 5 Concentric Stage Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+      {/* Grid of 4 Concentric Stage Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
         {steps.map((s) => {
           const isDone = s.num < currentStep;
           const isCurrent = s.num === currentStep;

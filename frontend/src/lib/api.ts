@@ -157,20 +157,6 @@ export interface LevelPredictionResult {
   recommendation: string;
 }
 
-export interface SentimentResult {
-  sentiment_label: string;
-  compound_score: number;
-  positive_score: number;
-  neutral_score: number;
-  negative_score: number;
-  summary: string;
-  word_frequencies: Array<{
-    text: string;
-    value: number;
-  }>;
-  total_words: number;
-}
-
 export interface SampleMemberRecord {
   id: number;
   age: number;
@@ -728,55 +714,6 @@ export async function predictLevelAPI(payload: UserStatsPayload): Promise<LevelP
         : code === 2
         ? "Solid baseline established. Progressive resistance and periodized HIIT will break plateaus."
         : "Elite conditioning index. Prioritize targeted recovery, sleep quality, and active rest intervals.",
-  };
-}
-
-export async function submitSentimentAPI(note: string): Promise<SentimentResult> {
-  const baseUrl = getApiBaseUrl();
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000);
-    const res = await fetch(`${baseUrl}/api/feedback/sentiment`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ note }),
-      signal: controller.signal,
-    });
-    clearTimeout(timeoutId);
-    if (res.ok) {
-      return (await res.json()) as SentimentResult;
-    }
-  } catch (err) {
-    console.warn("[FitStreak API] Offline mode: computing sentiment locally.", err);
-  }
-
-  const lower = note.toLowerCase();
-  const isPos = lower.includes("great") || lower.includes("good") || lower.includes("strong") || lower.includes("amazing") || lower.includes("loved");
-  const isNeg = lower.includes("bad") || lower.includes("tired") || lower.includes("hurt") || lower.includes("exhausted") || lower.includes("pain");
-
-  const label = isPos ? "Positive" : isNeg ? "Negative" : "Neutral";
-  const compound = isPos ? 0.78 : isNeg ? -0.45 : 0.0;
-
-  return {
-    sentiment_label: label,
-    compound_score: compound,
-    positive_score: isPos ? 0.65 : 0.1,
-    neutral_score: isPos ? 0.35 : 0.4,
-    negative_score: isNeg ? 0.5 : 0.05,
-    summary:
-      label === "Positive"
-        ? "High energy and satisfaction detected. Keep sustaining this positive feedback loop!"
-        : label === "Negative"
-        ? "Strenuous workout recorded. Ensure ample water intake, protein, and rest."
-        : "Steady exertion maintained. Good balanced training session.",
-    word_frequencies: [
-      { text: "energy", value: 3 },
-      { text: "strong", value: 2 },
-      { text: "cardio", value: 2 },
-      { text: "pace", value: 1 },
-      { text: "sweat", value: 1 },
-    ],
-    total_words: note.split(/\s+/).length,
   };
 }
 
