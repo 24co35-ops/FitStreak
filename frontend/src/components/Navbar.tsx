@@ -10,12 +10,10 @@ import {
   Sparkles,
   UserPlus,
   Home,
-  Server,
   Menu,
   X,
-  Settings2,
 } from "lucide-react";
-import { getApiBaseUrl, setApiBaseUrl } from "@/lib/api";
+import { getApiBaseUrl } from "@/lib/api";
 
 const navItems = [
   { name: "Home", shortName: "Home", href: "/", icon: Home, stage: "Overview" },
@@ -29,12 +27,9 @@ export function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLive, setIsLive] = useState<boolean | null>(null);
-  const [showConfig, setShowConfig] = useState(false);
-  const [urlInput, setUrlInput] = useState("");
 
   useEffect(() => {
     const currentUrl = getApiBaseUrl();
-    setUrlInput(currentUrl);
 
     const checkBackend = async () => {
       try {
@@ -49,14 +44,6 @@ export function Navbar() {
     };
     checkBackend();
   }, []);
-
-  const handleSaveUrl = () => {
-    if (urlInput) {
-      setApiBaseUrl(urlInput);
-      setShowConfig(false);
-      window.location.reload();
-    }
-  };
 
   return (
     <>
@@ -110,16 +97,15 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Right Section: Status Indicator & Settings */}
+          {/* Right Section: Status Indicator & Mobile Menu */}
           <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={() => setShowConfig(!showConfig)}
-              title={isLive === true ? "Backend connected" : isLive === false ? "Using offline data" : "Checking backend…"}
-              className={`flex items-center gap-1.5 px-2 py-1.5 rounded-full text-xs border transition-all cursor-pointer ${
+            <div
+              title={isLive === true ? "Live ML backend connected" : isLive === false ? "Using cached dataset" : "Checking backend…"}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[11px] font-medium border transition-all ${
                 isLive === true
-                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/25 hover:bg-emerald-500/20"
+                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/25"
                   : isLive === false
-                  ? "bg-amber-500/10 text-amber-400 border-amber-500/25 hover:bg-amber-500/20"
+                  ? "bg-amber-500/10 text-amber-400 border-amber-500/25"
                   : "bg-slate-800/60 text-slate-400 border-slate-700/60"
               }`}
             >
@@ -129,8 +115,10 @@ export function Navbar() {
                 )}
                 <span className={`relative inline-flex rounded-full h-2 w-2 ${isLive === true ? "bg-emerald-400" : isLive === false ? "bg-amber-400" : "bg-slate-400"}`} />
               </span>
-              <Settings2 className="w-3.5 h-3.5 text-slate-400" />
-            </button>
+              <span className="hidden sm:inline">
+                {isLive === true ? "Live" : isLive === false ? "Offline" : "Checking"}
+              </span>
+            </div>
 
             {/* Mobile Menu Toggle Button */}
             <button
@@ -142,44 +130,6 @@ export function Navbar() {
             </button>
           </div>
         </div>
-
-        {/* Backend Settings Dialog */}
-        {showConfig && (
-          <div className="mt-2 p-4 rounded-2xl bg-slate-950/95 border border-slate-800 backdrop-blur-xl shadow-2xl max-w-lg mx-auto transition-all">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <div className="flex items-center gap-2">
-                <Server className="w-4 h-4 text-emerald-400" />
-                <h4 className="text-sm font-bold text-white">API Service Endpoint</h4>
-              </div>
-              <button
-                onClick={() => setShowConfig(false)}
-                className="text-slate-400 hover:text-slate-200 p-1 cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="pt-3 space-y-3">
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Default is <code className="bg-slate-900 px-1.5 py-0.5 rounded text-emerald-400 font-mono">http://localhost:8000</code>. When offline, transparent fallback caching ensures every page still functions.
-              </p>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={urlInput}
-                  onChange={(e) => setUrlInput(e.target.value)}
-                  placeholder="http://localhost:8000"
-                  className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
-                />
-                <button
-                  onClick={handleSaveUrl}
-                  className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition cursor-pointer"
-                >
-                  Save
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Mobile Menu Dropdown */}
         {mobileMenuOpen && (

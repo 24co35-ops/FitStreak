@@ -188,10 +188,6 @@ export function getApiBaseUrl(): string {
   }
 
   // 2. Client-side browser runtime:
-  // Check user-configured override in localStorage (if customized via Navbar)
-  const saved = localStorage.getItem("fitstreak_backend_url");
-  if (saved !== null && saved !== "") return saved.trim().replace(/\/$/, "");
-
   // If explicit public API URL is set at build time, use it
   if (process.env.NEXT_PUBLIC_API_URL) {
     return process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "");
@@ -200,12 +196,6 @@ export function getApiBaseUrl(): string {
   // When running via Vercel Services, `vercel dev`, or `next dev` (via next.config.ts rewrite),
   // return empty string so browser requests use same-origin relative paths (/api/...).
   return "";
-}
-
-export function setApiBaseUrl(url: string) {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("fitstreak_backend_url", url.trim());
-  }
 }
 
 // -------------------------------------------------------------
