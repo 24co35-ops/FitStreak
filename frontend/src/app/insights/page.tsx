@@ -26,6 +26,7 @@ import {
   Legend 
 } from "recharts";
 import { PipelineStepper } from "@/components/PipelineStepper";
+import { StageFooterNav } from "@/components/StageFooterNav";
 import { 
   CorrelationData, 
   PCAData, 
@@ -89,8 +90,29 @@ export default function InsightsPage() {
         </div>
       </div>
 
+      {/* Quick Section Jump Bar */}
+      <div className="flex flex-wrap items-center gap-2 bg-slate-900/50 border border-slate-800/80 rounded-2xl p-2.5">
+        <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 px-2">
+          Jump to:
+        </span>
+        {[
+          { label: "Multicollinearity", href: "#insights-collinearity" },
+          { label: "12×12 Heatmap", href: "#insights-heatmap" },
+          { label: "VIF & PCA Scree", href: "#insights-vif-pca" },
+          { label: "Factor Loadings", href: "#insights-loadings" },
+        ].map((item) => (
+          <a
+            key={item.href}
+            href={item.href}
+            className="text-xs font-semibold text-slate-300 hover:text-purple-300 bg-slate-950/70 hover:bg-purple-500/10 border border-slate-800 hover:border-purple-500/30 px-3 py-1 rounded-xl transition"
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
+
       {/* Multicollinearity Alert Cards */}
-      <div className="space-y-3.5">
+      <div id="insights-collinearity" className="scroll-mt-24 space-y-3.5">
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
             <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
@@ -129,7 +151,7 @@ export default function InsightsPage() {
       </div>
 
       {/* 12x12 Pearson Correlation Matrix Heatmap */}
-      <div className="rounded-3xl bg-slate-900/40 border border-white/10 p-6 sm:p-8 backdrop-blur-xl shadow-2xl space-y-4">
+      <div id="insights-heatmap" className="scroll-mt-24 rounded-3xl bg-slate-900/40 border border-white/10 p-6 sm:p-8 backdrop-blur-xl shadow-2xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
           <div>
             <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -186,7 +208,7 @@ export default function InsightsPage() {
       </div>
 
       {/* Variance Inflation Factor (VIF) & PCA Scree Plot Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div id="insights-vif-pca" className="scroll-mt-24 grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* VIF Table */}
         <div className="rounded-3xl bg-slate-900/40 border border-white/10 p-6 sm:p-8 backdrop-blur-xl shadow-2xl space-y-4 flex flex-col justify-between">
           <div>
@@ -300,7 +322,7 @@ export default function InsightsPage() {
       </div>
 
       {/* PCA Component Loadings Table */}
-      <div className="rounded-3xl bg-slate-900/40 border border-white/10 p-6 sm:p-8 backdrop-blur-xl shadow-2xl space-y-4">
+      <div id="insights-loadings" className="scroll-mt-24 rounded-3xl bg-slate-900/40 border border-white/10 p-6 sm:p-8 backdrop-blur-xl shadow-2xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800/80">
           <div>
             <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -353,6 +375,8 @@ export default function InsightsPage() {
           </table>
         </div>
       </div>
+
+      <StageFooterNav currentStep={3} />
     </div>
   );
 }

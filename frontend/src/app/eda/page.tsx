@@ -26,6 +26,7 @@ import {
   Cell 
 } from "recharts";
 import { PipelineStepper } from "@/components/PipelineStepper";
+import { StageFooterNav } from "@/components/StageFooterNav";
 import { 
   SummaryData, 
   ChartsData, 
@@ -85,8 +86,30 @@ export default function EDAPage() {
         </div>
       </div>
 
+      {/* Quick Section Jump Bar */}
+      <div className="flex flex-wrap items-center gap-2 bg-slate-900/50 border border-slate-800/80 rounded-2xl p-2.5">
+        <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 px-2">
+          Jump to:
+        </span>
+        {[
+          { label: "KPIs", href: "#eda-kpis" },
+          { label: "Distributions", href: "#eda-charts" },
+          { label: "Gender Boxplots", href: "#eda-boxplots" },
+          { label: "IQR Outliers", href: "#eda-outliers" },
+          { label: "Descriptive Stats", href: "#eda-stats" },
+        ].map((item) => (
+          <a
+            key={item.href}
+            href={item.href}
+            className="text-xs font-semibold text-slate-300 hover:text-emerald-300 bg-slate-950/70 hover:bg-emerald-500/10 border border-slate-800 hover:border-emerald-500/30 px-3 py-1 rounded-xl transition"
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
+
       {/* KPI Telemetry Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div id="eda-kpis" className="scroll-mt-24 grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="relative overflow-hidden rounded-3xl bg-slate-900/40 border border-white/10 p-5 backdrop-blur-xl shadow-2xl">
           <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 to-cyan-400" />
           <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 block font-semibold">
@@ -133,7 +156,7 @@ export default function EDAPage() {
       </div>
 
       {/* 2 Primary Distribution Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div id="eda-charts" className="scroll-mt-24 grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Chart 1: Calories Burned Histogram */}
         <div className="rounded-3xl bg-slate-900/40 border border-white/10 p-6 backdrop-blur-xl shadow-2xl flex flex-col justify-between">
           <div className="mb-4">
@@ -250,7 +273,7 @@ export default function EDAPage() {
       </div>
 
       {/* Chart 3: Gender Boxplot Comparison */}
-      <div className="rounded-3xl bg-slate-900/40 border border-white/10 p-6 sm:p-8 backdrop-blur-xl shadow-2xl space-y-6">
+      <div id="eda-boxplots" className="scroll-mt-24 rounded-3xl bg-slate-900/40 border border-white/10 p-6 sm:p-8 backdrop-blur-xl shadow-2xl space-y-6">
         <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
           <div>
             <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -340,7 +363,7 @@ export default function EDAPage() {
       </div>
 
       {/* IQR Outlier Detection Table */}
-      <div className="rounded-3xl bg-slate-900/40 border border-white/10 p-6 backdrop-blur-xl shadow-2xl space-y-4">
+      <div id="eda-outliers" className="scroll-mt-24 rounded-3xl bg-slate-900/40 border border-white/10 p-6 backdrop-blur-xl shadow-2xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800/80">
           <div>
             <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -400,7 +423,7 @@ export default function EDAPage() {
       </div>
 
       {/* Descriptive Statistics Table (Polars Describe) */}
-      <div className="rounded-3xl bg-slate-900/40 border border-white/10 p-6 backdrop-blur-xl shadow-2xl space-y-4">
+      <div id="eda-stats" className="scroll-mt-24 rounded-3xl bg-slate-900/40 border border-white/10 p-6 backdrop-blur-xl shadow-2xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800/80">
           <div>
             <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -447,6 +470,8 @@ export default function EDAPage() {
           </table>
         </div>
       </div>
+
+      <StageFooterNav currentStep={2} />
     </div>
   );
 }

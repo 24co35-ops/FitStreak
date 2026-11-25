@@ -16,9 +16,11 @@ import {
   Info,
   Database,
   Activity,
-  Layers
+  Layers,
+  BarChart3
 } from "lucide-react";
 import { PipelineStepper } from "@/components/PipelineStepper";
+import { StageFooterNav } from "@/components/StageFooterNav";
 import { 
   UserStatsPayload, 
   SampleMemberRecord, 
@@ -104,11 +106,20 @@ export default function UploadPage() {
   const bmiCat = getBMICategory(calculatedBMI);
   const heartRateReserve = formData.max_bpm - formData.resting_bpm;
 
-  const handleSaveAndProceed = (e: React.FormEvent) => {
-    e.preventDefault();
+  const saveProfile = () => {
     if (typeof window !== "undefined") {
       localStorage.setItem("fitstreak_user_stats", JSON.stringify(formData));
     }
+  };
+
+  const handleSaveAndProceed = (e: React.FormEvent) => {
+    e.preventDefault();
+    saveProfile();
+    router.push("/eda");
+  };
+
+  const handleJumpToPredict = () => {
+    saveProfile();
     router.push("/predict");
   };
 
@@ -490,17 +501,31 @@ export default function UploadPage() {
               </ul>
             </div>
 
-            {/* Submit button */}
-            <button
-              type="submit"
-              className="w-full flex items-center justify-center gap-2 bg-emerald-400 hover:bg-emerald-300 text-slate-950 py-3.5 px-6 rounded-full font-extrabold shadow-xl shadow-emerald-500/20 transition-all transform hover:-translate-y-0.5 cursor-pointer text-sm"
-            >
-              <span>Feed to ML Predictor</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            {/* Submit buttons */}
+            <div className="space-y-2.5 pt-1">
+              <button
+                type="submit"
+                className="w-full flex items-center justify-center gap-2 bg-emerald-400 hover:bg-emerald-300 text-slate-950 py-3.5 px-6 rounded-full font-extrabold shadow-xl shadow-emerald-500/20 transition-all transform hover:-translate-y-0.5 cursor-pointer text-sm"
+              >
+                <BarChart3 className="w-4 h-4" />
+                <span>Save &amp; Continue to EDA (Stage 2)</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={handleJumpToPredict}
+                className="w-full flex items-center justify-center gap-2 bg-slate-800/80 hover:bg-slate-800 text-emerald-300 border border-slate-700/80 hover:border-emerald-500/40 py-2.5 px-4 rounded-full font-semibold transition cursor-pointer text-xs"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Save &amp; Jump Straight to ML Predictor (Stage 4)</span>
+              </button>
+            </div>
           </div>
         </div>
       </form>
+
+      <StageFooterNav currentStep={1} />
     </div>
   );
 }

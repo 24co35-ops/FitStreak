@@ -19,6 +19,7 @@ import {
   Scale
 } from "lucide-react";
 import { PipelineStepper } from "@/components/PipelineStepper";
+import { StageFooterNav } from "@/components/StageFooterNav";
 import { 
   UserStatsPayload, 
   CaloriesPredictionResult, 
@@ -505,6 +506,8 @@ export default function PredictPage() {
           </div>
         </div>
       </div>
+
+      <StageFooterNav currentStep={4} />
     </div>
   );
 }
