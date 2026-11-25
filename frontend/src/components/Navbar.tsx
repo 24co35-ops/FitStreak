@@ -18,11 +18,11 @@ import {
 import { getApiBaseUrl, setApiBaseUrl } from "@/lib/api";
 
 const navItems = [
-  { name: "Home", shortName: "Home", href: "/", icon: Home, stage: "Overview", num: null },
-  { name: "Stats & Profile", shortName: "Profile", href: "/upload", icon: UserPlus, stage: "Stage 1", num: "01" },
-  { name: "EDA Dashboard", shortName: "EDA", href: "/eda", icon: BarChart3, stage: "Stage 2", num: "02" },
-  { name: "Insights & PCA", shortName: "Insights", href: "/insights", icon: SlidersHorizontal, stage: "Stage 3", num: "03" },
-  { name: "ML Predict", shortName: "Predict", href: "/predict", icon: Sparkles, stage: "Stage 4", num: "04" },
+  { name: "Home", shortName: "Home", href: "/", icon: Home, stage: "Overview" },
+  { name: "Your Stats", shortName: "Stats", href: "/upload", icon: UserPlus, stage: "Step 1" },
+  { name: "Data Charts", shortName: "Charts", href: "/eda", icon: BarChart3, stage: "Step 2" },
+  { name: "Patterns", shortName: "Patterns", href: "/insights", icon: SlidersHorizontal, stage: "Step 3" },
+  { name: "Predict", shortName: "Predict", href: "/predict", icon: Sparkles, stage: "Step 4" },
 ];
 
 export function Navbar() {
@@ -102,19 +102,7 @@ export function Navbar() {
                       : "text-slate-300 hover:text-white hover:bg-slate-800/70 border border-transparent"
                   }`}
                 >
-                  {item.num ? (
-                    <span
-                      className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
-                        isActive
-                          ? "bg-emerald-400 text-slate-950 font-bold"
-                          : "bg-slate-800 text-slate-400"
-                      }`}
-                    >
-                      {item.num}
-                    </span>
-                  ) : (
-                    <Icon className={`w-3.5 h-3.5 ${isActive ? "text-emerald-400" : "text-slate-400"}`} />
-                  )}
+                  <Icon className={`w-3.5 h-3.5 ${isActive ? "text-emerald-400" : "text-slate-400"}`} />
                   <span className="hidden lg:inline">{item.name}</span>
                   <span className="lg:hidden">{item.shortName}</span>
                 </Link>
@@ -126,8 +114,8 @@ export function Navbar() {
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => setShowConfig(!showConfig)}
-              title="Click to configure API Endpoint"
-              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-mono border transition-all cursor-pointer ${
+              title={isLive === true ? "Backend connected" : isLive === false ? "Using offline data" : "Checking backend…"}
+              className={`flex items-center gap-1.5 px-2 py-1.5 rounded-full text-xs border transition-all cursor-pointer ${
                 isLive === true
                   ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/25 hover:bg-emerald-500/20"
                   : isLive === false
@@ -139,14 +127,7 @@ export function Navbar() {
                 {isLive === true && (
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 )}
-                <span
-                  className={`relative inline-flex rounded-full h-2 w-2 ${
-                    isLive === true ? "bg-emerald-400" : isLive === false ? "bg-amber-400" : "bg-slate-400"
-                  }`}
-                />
-              </span>
-              <span className="font-semibold hidden sm:inline">
-                {isLive === true ? "Backend Live" : isLive === false ? "Offline Fallback" : "Checking..."}
+                <span className={`relative inline-flex rounded-full h-2 w-2 ${isLive === true ? "bg-emerald-400" : isLive === false ? "bg-amber-400" : "bg-slate-400"}`} />
               </span>
               <Settings2 className="w-3.5 h-3.5 text-slate-400" />
             </button>

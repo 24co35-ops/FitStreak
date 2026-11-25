@@ -108,17 +108,14 @@ export function PipelineStepper({ currentStep }: { currentStep: number }) {
                   {isDone ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : `0${s.num}`}
                 </span>
 
-                <span
-                  className={`text-[9px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded ${
-                    isCurrent
-                      ? "bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30"
-                      : isDone
-                      ? "text-emerald-400/80 bg-emerald-500/10"
-                      : "text-slate-400 bg-slate-900/80"
-                  }`}
-                >
-                  {s.tag}
-                </span>
+                {isCurrent && (
+                  <span className="text-[9px] font-semibold uppercase tracking-widest px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    Active
+                  </span>
+                )}
+                {isDone && !isCurrent && (
+                  <Check className="w-3 h-3 text-emerald-400/70" />
+                )}
               </div>
 
               {/* Title & Syllabus topic */}

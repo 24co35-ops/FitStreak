@@ -21,11 +21,11 @@ export function StageFooterNav({ currentStep }: { currentStep: number }) {
             <ArrowLeft className="w-4 h-4" />
           </div>
           <div className="text-left">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 block">
-              Previous • Stage 0{prevStage.num}
+            <span className="text-[11px] text-slate-400 block">
+              Previous Step
             </span>
             <span className="text-sm font-bold text-white group-hover:text-emerald-300 transition">
-              {prevStage.navName}
+              ← {prevStage.navName}
             </span>
           </div>
         </Link>
@@ -38,11 +38,11 @@ export function StageFooterNav({ currentStep }: { currentStep: number }) {
             <Home className="w-4 h-4" />
           </div>
           <div className="text-left">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 block">
+            <span className="text-[11px] text-slate-400 block">
               Back to
             </span>
             <span className="text-sm font-bold text-white group-hover:text-emerald-300 transition">
-              Project Overview
+              Home
             </span>
           </div>
         </Link>
@@ -76,11 +76,11 @@ export function StageFooterNav({ currentStep }: { currentStep: number }) {
           className="group flex items-center justify-between sm:justify-end gap-3 px-5 py-3.5 rounded-2xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/35 hover:border-emerald-400/60 transition-all shadow-lg shadow-emerald-500/10"
         >
           <div className="text-left sm:text-right">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 block font-semibold">
-              Next Step • Stage 0{nextStage.num}
+            <span className="text-[11px] text-emerald-400 block font-semibold">
+              Next Step
             </span>
             <span className="text-sm font-bold text-white group-hover:text-emerald-300 transition">
-              {nextStage.navName}
+              {nextStage.navName} →
             </span>
           </div>
           <div className="w-8 h-8 rounded-xl bg-emerald-400 text-slate-950 flex items-center justify-center group-hover:translate-x-0.5 transition-transform shadow-sm">
@@ -94,14 +94,14 @@ export function StageFooterNav({ currentStep }: { currentStep: number }) {
             className="group flex items-center gap-2.5 px-4 py-3.5 rounded-2xl bg-slate-900/60 hover:bg-slate-900 border border-slate-800 hover:border-slate-700 transition-all text-xs font-bold text-slate-200"
           >
             <RotateCcw className="w-4 h-4 text-emerald-400" />
-            <span>Edit Input Profile</span>
+            <span>Edit Your Stats</span>
           </Link>
           <Link
             href="/"
             className="group flex items-center gap-2.5 px-5 py-3.5 rounded-2xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/35 text-xs font-bold text-emerald-300 transition-all"
           >
             <Home className="w-4 h-4" />
-            <span>Overview</span>
+            <span>Home</span>
           </Link>
         </div>
       )}
