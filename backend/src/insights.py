@@ -3,9 +3,32 @@ import numpy as np
 import polars as pl
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 from .data_loader import NUMERIC_COLUMNS, load_dataset
+
+
+def _compute_vif_scores(X_std: np.ndarray) -> List[float]:
+    """Compute Variance Inflation Factors directly from standardized features via NumPy.
+
+    For standardized columns (mean 0, unit variance), VIF_j equals the j-th diagonal
+    of the inverse correlation matrix, or 1 / (1 - R^2_j) via OLS regression.
+    """
+    try:
+        corr = np.corrcoef(X_std, rowvar=False)
+        return [float(v) for v in np.diag(np.linalg.inv(corr))]
+    except np.linalg.LinAlgError:
+        vifs: List[float] = []
+        n_features = X_std.shape[1]
+        for idx in range(n_features):
+            y = X_std[:, idx]
+            X_other = np.delete(X_std, idx, axis=1)
+            coef, _, _, _ = np.linalg.lstsq(X_other, y, rcond=None)
+            y_hat = X_other @ coef
+            ss_res = float(np.sum((y - y_hat) ** 2))
+            ss_tot = float(np.sum((y - np.mean(y)) ** 2))
+            r2 = 1.0 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
+            vifs.append(float("inf") if r2 >= 1.0 else 1.0 / (1.0 - r2))
+        return vifs
 
 
 def get_correlation_insights() -> Dict[str, Any]:
@@ -50,9 +73,10 @@ def get_correlation_insights() -> Dict[str, Any]:
     vif_scores: List[Dict[str, Any]] = []
     # Standardize X to stabilize VIF computation
     X_std = StandardScaler().fit_transform(X)
-    for idx, feature_name in enumerate(NUMERIC_COLUMNS):
+    raw_vifs = _compute_vif_scores(X_std)
+    for feature_name, raw_vif in zip(NUMERIC_COLUMNS, raw_vifs):
         try:
-            val_vif = float(variance_inflation_factor(X_std, idx))
+            val_vif = float(raw_vif)
             if np.isinf(val_vif) or np.isnan(val_vif):
                 val_vif = 99.99
         except Exception:
